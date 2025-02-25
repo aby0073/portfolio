@@ -1,22 +1,26 @@
 "use client";
-import React, { useEffect } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import Image from "next/image";
-import Typewriter from "typewriter-effect";
 import dynamic from "next/dynamic";
 
+// Disable SSR for Typewriter-Effect to fix hydration issues
+const Typewriter = dynamic(() => import("typewriter-effect"), { ssr: false });
+
 export default function Home() {
+  const buttonRef = useRef<HTMLButtonElement>(null);
+
   useEffect(() => {
-    const button = document.getElementById("view-projects-btn");
+    const button = buttonRef.current;
 
     const handleScroll = (e: Event) => {
       e.preventDefault();
       document.querySelector("#projects")?.scrollIntoView({ behavior: "smooth" });
     };
 
-    button?.addEventListener("click", handleScroll);
+    if (button) button.addEventListener("click", handleScroll);
 
     return () => {
-      button?.removeEventListener("click", handleScroll);
+      if (button) button.removeEventListener("click", handleScroll);
     };
   }, []);
 
@@ -50,24 +54,24 @@ export default function Home() {
       github: "https://github.com/aby0073/ERP_Dashboard",
     },
   ];
-  
 
   return (
     <div className="min-h-screen bg-gray-900 text-white">
       {/* Hero Section */}
       <section className="flex flex-col items-center justify-center h-screen text-center p-10">
         <h1 className="text-4xl md:text-6xl font-bold">Hi, I&apos;m Abin Roy</h1>
-        <p className="mt-4 text-xl md:text-2xl text-gray-300 max-w-2xl">
-          <Typewriter
-            options={{
-              strings: ["MERN Stack Developer", "Web App Enthusiast", "Open Source Contributor"],
-              autoStart: true,
-              loop: true,
-            }}
-          />
-        </p>
+        <div className="mt-4 text-xl md:text-2xl text-gray-300 max-w-2xl">
+  <Typewriter
+    options={{
+      strings: ["MERN Stack Developer", "Web App Enthusiast", "Open Source Contributor"],
+      autoStart: true,
+      loop: true,
+    }}
+  />
+</div>
+
         <button
-          id="view-projects-btn"
+          ref={buttonRef}
           className="mt-6 px-6 py-3 bg-blue-600 rounded-lg text-lg font-semibold hover:bg-blue-700 transition"
         >
           View Projects
@@ -100,7 +104,7 @@ export default function Home() {
             { name: "Git", src: "https://icon.icepanel.io/Technology/svg/Git.svg" },
             { name: "GitHub", src: "https://icon.icepanel.io/Technology/png-shadow-512/GitHub.png" },
           ].map((skill, index) => (
-            <Image key={index} src={skill.src} alt={skill.name} width={64} height={64} className="w-16 h-16 hover:scale-110 transition-transform" />
+            <Image key={index} src={skill.src} alt={skill.name} width={64} height={64} priority className="w-16 h-16 hover:scale-110 transition-transform" />
           ))}
         </div>
       </section>
@@ -111,7 +115,7 @@ export default function Home() {
         <div className="mt-6 grid md:grid-cols-2 gap-6">
           {projects.map((project, index) => (
             <div key={index} className="bg-gray-800 p-6 rounded-lg shadow-md hover:scale-105 transition-transform">
-              <Image src={project.image} alt={project.title} width={400} height={300} className="w-full h-48 object-cover rounded-lg" />
+              <Image src={project.image} alt={project.title} width={400} height={300} priority className="w-full h-48 object-cover rounded-lg" />
               <h3 className="text-xl font-semibold mt-4">{project.title}</h3>
               <p className="mt-2 text-gray-400">{project.description}</p>
               <div className="mt-4 flex justify-center gap-4">
@@ -120,23 +124,6 @@ export default function Home() {
               </div>
             </div>
           ))}
-        </div>
-      </section>
-
-      {/* Contact Section */}
-      <section id="contact" className="p-10 max-w-4xl mx-auto text-center">
-        <h2 className="text-3xl font-semibold text-blue-400">Contact Me</h2>
-        <p className="mt-4 text-gray-300">Feel free to reach out via email or LinkedIn.</p>
-        <div className="mt-6 flex justify-center gap-6">
-          <a href="mailto:royabin963@gmail.com">
-            <Image src="https://img.icons8.com/ios-filled/50/ffffff/new-post.png" alt="Email" width={40} height={40} className="w-10 h-10 hover:scale-110 transition-transform" />
-          </a>
-          <a href="https://github.com/aby0073">
-            <Image src="https://img.icons8.com/ios-glyphs/50/ffffff/github.png" alt="GitHub" width={40} height={40} className="w-10 h-10 hover:scale-110 transition-transform" />
-          </a>
-          <a href="https://www.linkedin.com/in/abin-roy-506453234/">
-            <Image src="https://img.icons8.com/ios-filled/50/ffffff/linkedin.png" alt="LinkedIn" width={40} height={40} className="w-10 h-10 hover:scale-110 transition-transform" />
-          </a>
         </div>
       </section>
     </div>
