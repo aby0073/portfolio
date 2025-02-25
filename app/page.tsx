@@ -1,6 +1,8 @@
 "use client";
 import React, { useEffect } from "react";
 import Image from "next/image";
+import Typewriter from "typewriter-effect";
+import dynamic from "next/dynamic";
 
 export default function Home() {
   useEffect(() => {
@@ -48,14 +50,21 @@ export default function Home() {
       github: "https://github.com/aby0073/ERP_Dashboard",
     },
   ];
+  
 
   return (
     <div className="min-h-screen bg-gray-900 text-white">
       {/* Hero Section */}
       <section className="flex flex-col items-center justify-center h-screen text-center p-10">
         <h1 className="text-4xl md:text-6xl font-bold">Hi, I&apos;m Abin Roy</h1>
-        <p className="mt-4 text-lg md:text-2xl text-gray-400">
-          MERN Stack Developer | Building Scalable Web Apps
+        <p className="mt-4 text-xl md:text-2xl text-gray-300 max-w-2xl">
+          <Typewriter
+            options={{
+              strings: ["MERN Stack Developer", "Web App Enthusiast", "Open Source Contributor"],
+              autoStart: true,
+              loop: true,
+            }}
+          />
         </p>
         <button
           id="view-projects-btn"
